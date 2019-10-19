@@ -1,17 +1,17 @@
 # Panoptic segmentation
-
-Installation
 ### Requirements:
 - PyTorch 10.0 from a nightly release. It **will not** work with 10.0 nor 10.0.1. Installation instructions can be found in https://pytorch.org/get-started/locally/. If you already have a diffent version, please unistall it befores re-install.
 - torchvision from master
 - cocoapi
 - yacs
+- scikit-image
 - matplotlib
 - GCC >= 4.9
 - OpenCV version 3.4.3
   - You can run this line to install it: pip install opencv-python==3.4.3.18
 - CUDA >= 9.0 (In case of running on the servers, the CUDA version is 10.0)
 
+### Mask-RCNN Installation
 ```bash
 # first, make sure that your conda is setup properly with the right environment
 # for that, check that `which conda`, `which pip` and `which python` points to the
@@ -61,7 +61,6 @@ cd maskrcnn-benchmark
 # the files if you want and won't need to
 # re-build it
 python setup.py build develop
-
 
 unset INSTALL_DIR
 ``` 
