@@ -383,10 +383,8 @@ class COCODemo(object):
         colors = self.compute_colors_for_labels(labels).tolist()
 
         for mask, color in zip(masks, colors):
-            thresh = mask[0, :, :, None]
-            contours, hierarchy = cv2_util.findContours(
-                thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE
-            )
+            thresh = mask[0, :, :, None].astype(np.uint8)
+            contours, hierarchy = cv2_util.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             image = cv2.drawContours(image, contours, -1, color, 3)
 
         composite = image
@@ -524,3 +522,191 @@ def vis_keypoints(img, kps, kp_thresh=2, alpha=0.7):
 
     # Blend the keypoints.
     return cv2.addWeighted(img, 1.0 - alpha, kp_mask, alpha, 0)
+
+
+
+def visMask(im, seg_mask):
+  m = seg_mask.instances.masks
+  m = m.numpy().reshape([128,128])
+  im = np.transpose(im, (2,0,1)) # 3, 128, 128
+  res = im*m
+  res = np.transpose(res, (1,2,0)) # 128, 128, 3 
+  # plt.imshow(res)
+
+############################################# Pretrained weight removal ######################################################
+def removekey(d, listofkeys):
+  r = dict(d)
+  for key in listofkeys:
+      print('key: {} is removed'.format(key))
+      r.pop(key)
+  return r
+
+
+#### Segmantic segmentation loss:
+class SegLoss(nn.Module):
+  
+  def __init__(self):
+    super(SegLoss, self).__init__()
+
+  def prepare_target(self, targets):
+    labels = []
+
+    for t in targets:
+      t = t.get_field("seg_masks").get_mask_tensor().unsqueeze(0)
+      labels.append(t)
+
+    return cat(labels, dim=0).unsqueeze(1).to("cuda", dtype=torch.float32)
+
+  def forward(self, mask, target):
+    '''
+      mask : Tensor
+      target : list[Boxlist]
+    '''
+    
+    target = self.prepare_target(target)
+
+    loss = Fx.binary_cross_entropy_with_logits(mask, target)
+    
+    return loss
+
+
+### Segmenter model:
+def panoptic_upsampler_block(in_channels, out_channels, expansion):
+  
+  modules = []
+  
+  if expansion == 0:
+    modules.append( make_conv3x3(
+              in_channels,
+              out_channels,
+              dilation=1,
+              stride=1,
+              use_gn=True,
+              use_relu=True,
+              kaiming_init=True
+          )) # no upsample
+    
+  for i in range(expansion):
+    modules.append(make_conv3x3(
+              in_channels if i == 0 else out_channels,
+              out_channels,
+              dilation=1,
+              stride=1,
+              use_gn=True,
+              use_relu=True,
+              kaiming_init=True
+          ))
+    modules.append(nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False))
+  
+  return nn.Sequential(*modules)
+
+
+class PanopticRCNN(nn.Module):
+
+    def __init__(self, cfg, num_classes):
+        super(PanopticRCNN, self).__init__()
+
+       
+        self.scale1_block = panoptic_upsampler_block(in_channels=cfg.MODEL.RESNETS.BACKBONE_OUT_CHANNELS,
+                                                     out_channels=cfg.MODEL.PANOPTIC.CHANNEL_SIZE, expansion=3) # 1/32
+        self.scale2_block = panoptic_upsampler_block(in_channels=cfg.MODEL.RESNETS.BACKBONE_OUT_CHANNELS,
+                                                     out_channels=cfg.MODEL.PANOPTIC.CHANNEL_SIZE, expansion=2) # 1/16
+        self.scale3_block = panoptic_upsampler_block(in_channels=cfg.MODEL.RESNETS.BACKBONE_OUT_CHANNELS, 
+                                                     out_channels=cfg.MODEL.PANOPTIC.CHANNEL_SIZE, expansion=1) # 1/8
+        self.scale4_block = panoptic_upsampler_block(in_channels=cfg.MODEL.RESNETS.BACKBONE_OUT_CHANNELS,
+                                                     out_channels=cfg.MODEL.PANOPTIC.CHANNEL_SIZE, expansion=0) # 1/4
+        
+        self.num_classes = num_classes
+        
+        self.final_seg_mask = nn.Sequential(
+          nn.Conv2d(kernel_size=1, in_channels=128, out_channels=self.num_classes),
+          nn.Upsample(scale_factor=4, mode='bilinear', align_corners=False)
+        )
+        
+        
+    def forward(self, features):
+        """
+        Arguments:
+            features (list[Tensor]): feature maps gen post FPN, (N, C, H, W)
+        Returns:
+            segmentation_mask: semantic segmentation mask
+        """
+    
+        
+        x1 = self.scale1_block(features[3])
+        
+        x2 = self.scale2_block(features[2])
+        
+        x3 = self.scale3_block(features[1])
+        
+        x4 = self.scale4_block(features[0])
+           
+        x = x1 + x2 + x3 + x4
+        
+        seg_mask = self.final_seg_mask(x)
+        
+        return seg_mask
+
+
+class PanopticModel(nn.Module):
+    """
+    Main class for Panoptic R-CNN. Currently supports boxes and masks.
+    It consists of three main parts:
+    - backbone
+    - rpn
+    - panoptic: ouputs semantic segmentation mask
+    - heads: takes the features + the proposals from the RPN and computes
+        detections / masks from it.
+    """
+    def __init__(self, cfg):
+        super(PanopticModel, self).__init__()
+
+        self.backbone = build_backbone(cfg)
+        self.loss = SegLoss()
+        self.training = True
+        self.rpn = build_rpn(cfg, self.backbone.out_channels)
+        self.roi_heads = build_roi_heads(cfg, self.backbone.out_channels)
+        self.panoptic = PanopticRCNN(cfg, num_classes=cfg.MODEL.PANOPTIC.NUM_CLASSES)
+               
+
+    def forward(self, images, targets=None):
+        """
+        Arguments:
+            images (list[Tensor] or ImageList): images to be processed
+            targets (list[BoxList]): ground-truth boxes present in the image (optional)
+        Returns:
+            result (list[BoxList] or dict[Tensor]): the output from the model.
+                During training, it returns a dict[Tensor] which contains the losses.
+                During testing, it returns list[BoxList] contains additional fields
+                like `scores`, `labels` and `mask` (for Mask R-CNN models).
+        """
+
+        images = to_image_list(images)
+        features = self.backbone(images.tensors)      
+        seg_mask = self.panoptic(features)
+        proposals, proposal_losses = self.rpn(images, features, targets)
+      
+       
+        if self.roi_heads:
+            x, result, detector_losses = self.roi_heads(features, proposals, targets)
+        else:
+            # RPN-only models don't have roi_heads
+            x = features
+            result = proposals
+            detector_losses = {}
+
+        if self.training:
+            segmentation_loss = self.loss(seg_mask, targets)
+            
+            losses = {}
+            losses.update(detector_losses)
+            losses.update(proposal_losses)
+            losses.update(dict(segmentation_loss=segmentation_loss))
+            
+            return losses
+             
+        return seg_mask, result
+
+### Build panoptic network:
+def build_panoptic_network(cfg):
+    return PanopticModel(cfg)
