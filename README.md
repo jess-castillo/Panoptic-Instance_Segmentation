@@ -12,9 +12,6 @@ Installation
   - You can run this line to install it: pip install opencv-python==3.4.3.18
 - CUDA >= 9.0 (In case of running on the servers, the CUDA version is 10.0)
 
-
-### Option 1: Step-by-step installation
-
 ```bash
 # first, make sure that your conda is setup properly with the right environment
 # for that, check that `which conda`, `which pip` and `which python` points to the
@@ -67,20 +64,24 @@ python setup.py build develop
 
 
 unset INSTALL_DIR
-
-
-
+``` 
 
 # Instance Segmentation
+### Requirements:
+- setuptools
+- pycocotools
+
 ### Penn-udan Database for Pedestrian Detection and Segmentation
+```
 Dowload:
 wget https://www.cis.upenn.edu/~jshi/ped_html/PennFudanPed.zip .
 Extract it in the current folder:
 unzip PennFudanPed.zip
+```
 
-
-For training and evaluation functions:
-Download TorchVision repo to use some files from references/detection
+### For training and evaluation functions:
+```
+# Download TorchVision repo to use some files from references/detection
 git clone https://github.com/pytorch/vision.git
 cd vision
 git checkout v0.3.0
@@ -90,3 +91,5 @@ cp references/detection/transforms.py ../
 cp references/detection/coco_eval.py ../
 cp references/detection/engine.py ../
 cp references/detection/coco_utils.py ../
+```
+
