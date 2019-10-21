@@ -8,7 +8,7 @@
 - matplotlib
 - GCC >= 4.9
 - OpenCV version 3.4.3
-  - You can run this line to install it: pip install opencv-python==3.4.3.18
+  - You can run this line to install it: ```pip install opencv-python==3.4.3.18```
 - CUDA >= 9.0 (In case of running on the servers, the CUDA version is 10.0)
 
 ### Mask-RCNN Installation
