@@ -19,8 +19,6 @@ python setup.py build_ext inst
 ```
 
 
-For implementing UPSNet we are going to use the COCOval2017 dataset. 
-
 **Before  runing  any `.sh` file, you should do this:**
 
   - Make the script executable with command `chmod +x <fileName>`.
@@ -28,8 +26,9 @@ For implementing UPSNet we are going to use the COCOval2017 dataset.
 
 Once you have clone the repository run `init.sh` to build essential C++/CUDA modules which also download the pretained model.
 
+For implementing UPSNet we are going to use the COCOval2017 dataset.
 
-### COCO datset and annotations 
+### COCO datset and annotations. 
 
 Download the following files:
 
