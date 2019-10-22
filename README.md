@@ -1,8 +1,10 @@
-# Instance Segmentation
+# Homework
+
+## Instance Segmentation
 1. Change the model to Mask-RCNN and Faster-RCNN using the detection models from torchvision.
 2. Report and discuss your qualitative results. Show the metrics (all of the AP and AR metrics) and discuss based on them.
 
-# Panoptic segmentation
+## Panoptic segmentation
 1. Change the backbone of the architecture and compare the results obtained with the original code. Discuss the quality of segmentation.
 2. Implement the Panoptic Quality metric.
 
