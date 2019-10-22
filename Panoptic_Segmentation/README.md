@@ -126,6 +126,10 @@ Run `init_coco.sh` to prepare COCO dataset for UPSNet.
 
 Run `download_weights.sh` to get trained model weights for COCO.
 
+**Be carefull, to run an `.sh` file, you should do this:**
+    ** - Make the script executable with command chmod +x <fileName>.**
+    ** - Run the script using ./<fileName>., i.e., the full path to the `.sh` file.**
+
 ### Recommendation:
  - To get the PQ results easier, you should replace the file that we are giving to you, `base_dataset.py`, to the folder `upsnet/dataset/`. The difference is that this new file would create a `result.json` were you can find the PQ metrics. 
  - **You need to change the `.yaml` file which is located in the `experiments` folder depending on how many GPUs you are using, and its ID.** 
