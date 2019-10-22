@@ -1,4 +1,4 @@
-## UPSNet(Optional) 
+## UPSNet
 
 
 ### Requirements:
