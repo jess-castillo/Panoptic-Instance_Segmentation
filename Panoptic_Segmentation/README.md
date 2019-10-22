@@ -68,11 +68,25 @@ unset INSTALL_DIR
 
 ## UPSNet(Optional) 
 
+
+### Requirements:
+
+Pip install easydict
+
+pip install git+https://github.com/cocodataset/panopticapi.git
+
+git clone https://github.com/cocodataset/cocoapi.git
+cd cocoapi/PythonAPI
+python setup.py build_ext inst
+
+
+
 For implementing UPSNet we are going to use the COCOval2017 dataset. 
 
 Once you have clone the repositorie run `init.sh` to build essential C++/CUDA modules which also download the pretained model.
 
-Download the following documents from the COCO website:
+### COCO datset and annotations 
+
 
 [COCOval2017]
 (http://images.cocodataset.org/zips/val2017.zip) (1GB)
@@ -96,7 +110,8 @@ If you don´t understand how does a softlink works check:
 https://www.cyberciti.biz/faq/creating-soft-link-or-symbolic-link/ 
 
 
-Now you can check which files are under the new soft link runing $ ls -l  $COCO_ROOT data/coco
+Now you can check which files are under the new soft link runing
+`$ ls -l  $COCO_ROOT data/coco`
 
 Run `init_coco.sh` to prepare COCO dataset for UPSNet.
 
@@ -106,8 +121,10 @@ Finally you can test the model in the validation dataset and obtain the qualitat
 
 
 ```shell
-python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_coco_1gpu.yaml --weight_path model/upsnet_resnet_50_coco_90000.pth
+python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_coco_4gpu.yaml --weight_path model/upsnet_resnet_50_coco_90000.pth
 ```
+
+You need to change the .yaml file depending on the GPU you are using.
 
 Once the test phase has finished you will find a folder called `output`
 
@@ -116,3 +133,14 @@ Under that folder you will find the Panoptic Quality results in :
 `output`/ `upsnet`/ `coco`/`upsnet_resnet50_coco_4gpu`/`val2017`/`results`/`pans_unified`/results.json 
 
 At the  begining of the results.json file you will find the Panoptic Quality for all the classes of the COCO val dataset. At the end of it you will find the Panoptic quality for Things and Stuff classes. 
+
+
+For the qualitative results you will find the images under the folder `pan` which you can find in:
+
+`output`/ `upsnet`/ `coco`/`upsnet_resnet50_coco_4gpu`/`val2017`/`results`/`pans_unified`/`pan`
+
+
+
+
+
+
