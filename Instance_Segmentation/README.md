@@ -5,7 +5,7 @@
 
 ### Penn-udan Database for Pedestrian Detection and Segmentation
 ```
-Dowload:
+Download:
 wget https://www.cis.upenn.edu/~jshi/ped_html/PennFudanPed.zip .
 Extract it in the current folder:
 unzip PennFudanPed.zip
@@ -25,3 +25,6 @@ cp references/detection/engine.py ../
 cp references/detection/coco_utils.py ../
 ```
 
+## Homework:
+1. Change the model to Mask-RCNN and Faster-RCNN using the detection models from torchvision.
+2. Report and discuss your qualitative results. Show the metrics and discuss based on them. 
