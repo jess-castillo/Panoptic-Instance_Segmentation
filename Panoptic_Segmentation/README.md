@@ -66,7 +66,7 @@ python setup.py build develop
 unset INSTALL_DIR
 ``` 
 ### Suggestions
--After the installation of Mask-RCNN, you might want to clone the homework's repo (**this one**) inside Mask-RCNN's installation folder (typically called ```maskrcnn-benchmark```); and move the ```default.py``` we are giving you to ```maskrcnn-benchmark/maskrcnn_benchmark/config/```, replacing the original one. If you are getting an error related to a ```INPUT.VERTICAL_FLIP_PROB_TRAIN``` operation, this would correct it.
+- After the installation of Mask-RCNN, you might want to clone the homework's repo (**this one**) inside Mask-RCNN's installation folder (typically called ```maskrcnn-benchmark```); and move the ```default.py``` we are giving you to ```maskrcnn-benchmark/maskrcnn_benchmark/config/```, replacing the original one. If you are getting an error related to a ```INPUT.VERTICAL_FLIP_PROB_TRAIN``` operation, this would correct it.
 
 ## UPSNet(Optional) 
 
@@ -128,16 +128,16 @@ Run `download_weights.sh` to get trained model weights for COCO.
 
 ### Recommendation:
  - To get the PQ results easier, you should replace the file that we are giving to you, `base_dataset.py`, to the folder `upsnet/dataset/`. The difference is that this new file would create a `result.json` were you can find the PQ metrics. 
+ - **You need to change the `.yaml` file which is located in the `experiments` folder depending on the GPU you are using.** 
 
 ### Test the model:
 Finally, you can test the model in the  COCO validation dataset and obtain the qualitative and quatitavie results runing: 
-
 
 ```shell
 python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_coco_4gpu.yaml --weight_path model/upsnet_resnet_50_coco_90000.pth
 ```
 
-You need to change the `.yaml` file which is located in the `experiments` folder depending on the GPU you are using. 
+
 
 Once the test phase has finished you will find a folder called `output`.
 
