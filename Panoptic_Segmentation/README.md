@@ -64,3 +64,48 @@ python setup.py build develop
 
 unset INSTALL_DIR
 ``` 
+
+
+## UPSNet(Optional) 
+
+For implementing UPSNet we are going to use the COCOval2017 dataset. 
+
+#Once you have clone the repositorie run `init.sh` to build essential C++/CUDA modules and download pretrained model. 
+
+#Download the following documents from the COCO website:
+
+[COCOval2017]
+(http://images.cocodataset.org/zips/val2017.zip)(5K images/1GB)
+
+[Train/val annotations]
+(http://images.cocodataset.org/annotations/annotations_trainval2017.zip) (241MB)
+
+[Stuff train/val annotations]
+(http://images.cocodataset.org/annotations/stuff_annotations_trainval2017.zip)(1.1GB)
+
+[Panoptic Train/Val annotations]
+(http://images.cocodataset.org/annotations/panoptic_annotations_trainval2017.zip)(821MB)
+
+
+Once you have download all the files, create a folder named $COCO_ROOT which have  `annotations` and `images` folders under it.
+
+Please create a soft link by `ln -s $COCO_ROOT data/coco` under `UPSNet current folder`.
+
+
+If you don´t understand how does a softlink works check 
+https://www.cyberciti.biz/faq/creating-soft-link-or-symbolic-link/ 
+
+
+Now you can check which files are under the new soft link runing $ ls -l  $COCO_ROOT data/coco
+
+
+Run `init_coco.sh` to prepare COCO dataset for UPSNet.
+
+Run `download_weights.sh` to get trained model weights for COCO.
+
+Finally you can test the model in the validation dataset and obtain the qualitative and quatitavie results runing: 
+
+
+```shell
+python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_coco_1gpu.yaml --weight_path model/upsnet_resnet_50_coco_90000.pth
+```
