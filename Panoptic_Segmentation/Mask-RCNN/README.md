@@ -70,4 +70,5 @@ unset INSTALL_DIR
 
 # Homework
 1. Change the backbone of the architecture and compare the results obtained with the original code. Discuss the quality of segmentation.
-2. Implement the Panoptic Quality metric.
+
+ - (Optional) Implement the Panoptic Quality metric.
