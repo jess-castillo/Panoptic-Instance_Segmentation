@@ -113,6 +113,6 @@ Once the test phase has finished you will find a folder called `output`
 
 Under that folder you will find the Panoptic Quality results in :
 
-`output` , `upsnet`, `coco`, `upsnet_resnet50_coco_4gpu`, `val2017`,`results`,`pans_unified`, results.json 
+`output`/ `upsnet`/ `coco`/`upsnet_resnet50_coco_4gpu`/`val2017`/`results`/`pans_unified`/results.json 
 
 At the  begining of the results.json file you will find the Panoptic Quality for all the classes of the COCO val dataset. At the end of it you will find the Panoptic quality for Things and Stuff classes. 
