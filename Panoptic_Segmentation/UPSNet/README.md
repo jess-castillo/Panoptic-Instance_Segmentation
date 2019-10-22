@@ -3,6 +3,12 @@
 
 ### Requirements:
 
+
+UPSNet repository:
+```
+git clone https://github.com/uber-research/UPSNet.git
+```
+
 easydict:
 ```
 pip install easydict
