@@ -1,6 +1,7 @@
 # Panoptic segmentation
+## Mask-RCNN
 ### Requirements:
-- PyTorch 10.0 from a nightly release. It **will not** work with 10.0 nor 10.0.1. Installation instructions can be found in https://pytorch.org/get-started/locally/. If you already have a diffent version, please unistall it befores re-install.
+- PyTorch 10.0 from a nightly release. It **will not** work with 10.0 nor 10.0.1. Installation instructions can be found in https://pytorch.org/get-started/locally/. If you already have a diffent version, plpanease unistall it befores re-install.
 - torchvision from master
 - cocoapi
 - yacs
@@ -9,7 +10,7 @@
 - GCC >= 4.9
 - OpenCV version 3.4.3
   - You can run this line to install it: ```pip install opencv-python==3.4.3.18```
-- CUDA >= 9.0 (In case of running on the servers, the CUDA version is 10.0)
+- CUDA >= 9.0 (Keep in mind that in case of running on the servers, the CUDA version is 10.0)
 
 ### Mask-RCNN Installation
 ```bash
@@ -28,7 +29,7 @@ pip install ninja yacs cython matplotlib tqdm opencv-python
 
 # follow PyTorch installation in https://pytorch.org/get-started/locally/
 # we give the instructions for CUDA 9.0
-conda install -c pytorch pytorch-nightly torchvision cudatoolkit=9.0
+conda install -c pytorch pytorch-nightly torchvision cudatoolkit=10.0 
 
 export INSTALL_DIR=$PWD
 
@@ -64,21 +65,28 @@ python setup.py build develop
 
 unset INSTALL_DIR
 ``` 
-
+### Suggestions
+-After the installation of Mask-RCNN, you might want to clone the homework's repo (**this one**) inside Mask-RCNN's installation folder (typically called ```maskrcnn-benchmark```); and move the ```default.py``` we are giving you to ```maskrcnn-benchmark/maskrcnn_benchmark/config/```, replacing the original one. If you are getting an error related to a ```INPUT.VERTICAL_FLIP_PROB_TRAIN``` operation, this would correct it.
 
 ## UPSNet(Optional) 
 
 
 ### Requirements:
 
-Pip install easydict
-
+easydict:
+```
+pip install easydict
+```
+panopticapi:
+```
 pip install git+https://github.com/cocodataset/panopticapi.git
-
+```
+cocoapi:
+```
 git clone https://github.com/cocodataset/cocoapi.git
 cd cocoapi/PythonAPI
 python setup.py build_ext inst
-
+```
 
 
 For implementing UPSNet we are going to use the COCOval2017 dataset. 
@@ -118,28 +126,31 @@ Run `init_coco.sh` to prepare COCO dataset for UPSNet.
 
 Run `download_weights.sh` to get trained model weights for COCO.
 
+### Recommendation:
+ - To get the PQ results easier, you should replace the file that we are giving to you, `base_dataset.py`, to the folder `upsnet/dataset/`. The difference is that this new file would create a `result.json` were you can find the PQ metrics. 
 
-Finally you can test the model in the  COCO validation dataset and obtain the qualitative and quatitavie results runing: 
+### Test the model:
+Finally, you can test the model in the  COCO validation dataset and obtain the qualitative and quatitavie results runing: 
 
 
 ```shell
 python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_coco_4gpu.yaml --weight_path model/upsnet_resnet_50_coco_90000.pth
 ```
 
-You need to change the `.yaml` file which is located in the `experiments` folder depending on the GPU you are using.
+You need to change the `.yaml` file which is located in the `experiments` folder depending on the GPU you are using. 
 
-Once the test phase has finished you will find a folder called `output`
+Once the test phase has finished you will find a folder called `output`.
 
 Under that folder you will find the Panoptic Quality results in :
 
-`output`/ `upsnet`/ `coco`/`upsnet_resnet50_coco_4gpu`/`val2017`/`results`/`pans_unified`/`results.json` 
+`output/upsnet/coco/upsnet_resnet50_coco_4gpu/val2017/results/pans_unified/results.json` 
 
 At the  begining of the `results.json` file you will find the Panoptic Quality for all the classes of the COCO val dataset. At the end of it you will find the Panoptic quality for Things and Stuff classes. 
 
 
 For the qualitative results you will find the images under the folder `pan` which you can find in:
 
-`output`/ `upsnet`/ `coco`/`upsnet_resnet50_coco_4gpu`/`val2017`/`results`/`pans_unified`/`pan`
+`output/upsnet/coco/upsnet_resnet50_coco_4gpu/val2017/results/pans_unified/pan`
 
 
 
