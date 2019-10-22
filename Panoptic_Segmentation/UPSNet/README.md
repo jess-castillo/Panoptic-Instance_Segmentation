@@ -30,7 +30,7 @@ python setup.py build_ext inst
   - Make the script executable with command `chmod +x <fileName>`.
   - Run the script using `./<fileName>.`, i.e., the full path to the `.sh` file.
 
-Once you have clone the repository run `init.sh` to build essential C++/CUDA modules which also download the pretained model.
+Once you have clone the UPSNet repository run `init.sh` to build essential C++/CUDA modules which also download the pretained model.
 
 For implementing UPSNet we are going to use the COCOval2017 dataset.
 
