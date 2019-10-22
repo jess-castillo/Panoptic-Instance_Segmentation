@@ -87,6 +87,7 @@ Once you have clone the repositorie run `init.sh` to build essential C++/CUDA mo
 
 ### COCO datset and annotations 
 
+Download the following files:
 
 [COCOval2017]
 (http://images.cocodataset.org/zips/val2017.zip) (1GB)
@@ -103,7 +104,7 @@ Once you have clone the repositorie run `init.sh` to build essential C++/CUDA mo
 
 Once you have download all the files, create a folder named $COCO_ROOT which have  `annotations` and `images` folders under it.
 
-Please create a soft link by `ln -s $COCO_ROOT data/coco` under your `UPSNet current folder`.
+Create a soft link by `ln -s $COCO_ROOT data/coco` under your `UPSNet current folder`.
 
 
 If you don´t understand how does a softlink works check: 
@@ -117,22 +118,23 @@ Run `init_coco.sh` to prepare COCO dataset for UPSNet.
 
 Run `download_weights.sh` to get trained model weights for COCO.
 
-Finally you can test the model in the validation dataset and obtain the qualitative and quatitavie results runing: 
+
+Finally you can test the model in the  COCO validation dataset and obtain the qualitative and quatitavie results runing: 
 
 
 ```shell
 python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_coco_4gpu.yaml --weight_path model/upsnet_resnet_50_coco_90000.pth
 ```
 
-You need to change the .yaml file depending on the GPU you are using.
+You need to change the `.yaml` file which is located in the `experiments` folder depending on the GPU you are using.
 
 Once the test phase has finished you will find a folder called `output`
 
 Under that folder you will find the Panoptic Quality results in :
 
-`output`/ `upsnet`/ `coco`/`upsnet_resnet50_coco_4gpu`/`val2017`/`results`/`pans_unified`/results.json 
+`output`/ `upsnet`/ `coco`/`upsnet_resnet50_coco_4gpu`/`val2017`/`results`/`pans_unified`/`results.json` 
 
-At the  begining of the results.json file you will find the Panoptic Quality for all the classes of the COCO val dataset. At the end of it you will find the Panoptic quality for Things and Stuff classes. 
+At the  begining of the `results.json` file you will find the Panoptic Quality for all the classes of the COCO val dataset. At the end of it you will find the Panoptic quality for Things and Stuff classes. 
 
 
 For the qualitative results you will find the images under the folder `pan` which you can find in:
