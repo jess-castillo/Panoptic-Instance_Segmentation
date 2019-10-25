@@ -2,6 +2,18 @@
 
 ## Instance Segmentation
 1. Change the model to Mask-RCNN and Faster-RCNN using the detection models from torchvision.
+
+For making this you will need to import the following modules:
+
+from torchvision.models.detection import FasterRCNN, MaskRCNN
+
+
+from torchvision.models.detection.rpn import AnchorGenerator
+
+These two models need an anchor-generator, a backbone and a RoIpooler. You can play with  this three things in order to obtain different results. 
+
+
+
 2. Report and discuss your qualitative results. Show the metrics (all of the AP and AR metrics) and discuss based on them.
 
 ## Panoptic segmentation
