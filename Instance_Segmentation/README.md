@@ -4,7 +4,7 @@
 - setuptools
 - pycocotools
 
-### Penn-udan Database for Pedestrian Detection and Segmentation
+### Penn-Fudan Database for Pedestrian Detection and Segmentation
 ```
 Download:
 wget https://www.cis.upenn.edu/~jshi/ped_html/PennFudanPed.zip .
