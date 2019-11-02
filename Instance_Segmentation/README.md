@@ -1,5 +1,6 @@
 # Instance Segmentation
 ### Requirements:
+- torchvision
 - setuptools
 - pycocotools
 
