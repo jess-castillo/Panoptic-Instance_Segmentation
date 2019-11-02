@@ -12,12 +12,12 @@ Extract it in the current folder:
 unzip PennFudanPed.zip
 ```
 
-### For training and evaluation functions:
+### (Required) For training and evaluation functions:
 ```
 # Download TorchVision repo to use some files from references/detection
 git clone https://github.com/pytorch/vision.git
 cd vision
-git checkout v0.3.0
+# git checkout v0.3.0
 
 cp references/detection/utils.py ../
 cp references/detection/transforms.py ../
