@@ -12,7 +12,20 @@ from torchvision.models.detection import FasterRCNN, MaskRCNN
 
 from torchvision.models.detection.rpn import AnchorGenerator
 ```
-These two models need an anchor-generator, a backbone and a RoIpooler. You can play with  this three things in order to obtain different results. 
+The FasterRCNN model needs four things which are:
+
+1)A backbone.
+2)The number of classes (in this case 2).
+3)An anchor generator for the bounding boxes.
+4)A roipooler.
+
+The MaskRCNN model need five things which are:
+
+1)A backbone.
+2)The number of classes (in this case 2).
+3)An anchor generator for the bounding boxes.
+4)A roipooler.
+5)A maskroipooler.
 
 2. Follow the instructions presented on the README.md under the Instance_Segmentation folder in order to install all the requirements you need. 
 
