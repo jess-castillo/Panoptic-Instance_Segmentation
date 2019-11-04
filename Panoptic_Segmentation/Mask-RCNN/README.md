@@ -66,7 +66,7 @@ python setup.py build develop
 unset INSTALL_DIR
 ``` 
 ### Suggestions
-- After the installation of Mask-RCNN, you might want to clone the homework's repo (**this one**) inside Mask-RCNN's installation folder (typically called ```maskrcnn-benchmark```); and move the ```default.py``` we are giving you to ```maskrcnn-benchmark/maskrcnn_benchmark/config/```, replacing the original one. If you are getting an error related to a ```INPUT.VERTICAL_FLIP_PROB_TRAIN``` operation, this would correct it.
+- After the installation of Mask-RCNN, you might want to clone the homework's repo (**this one**) inside Mask-RCNN's installation folder (typically called ```maskrcnn-benchmark```); and move the ```default.py``` we are giving you to ```maskrcnn-benchmark/maskrcnn_benchmark/config/```, replacing the original one. Also, you have to move the ```build.py``` we are giving you to ```maskrcnn-benchmark/maskrcnn_benchmark/data/transforms```, replacing the original one. If you are getting an error related to a ```INPUT.VERTICAL_FLIP_PROB_TRAIN``` operation, this would correct it.
 
 # Homework
 1. Change the backbone of the architecture and compare the results obtained with the original code. Discuss the quality of segmentation.
