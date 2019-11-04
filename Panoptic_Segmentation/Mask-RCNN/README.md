@@ -1,7 +1,7 @@
 # Panoptic segmentation
 ## Mask-RCNN
 ### Requirements:
-- PyTorch 10.0 from a nightly release. It **will not** work with 10.0 nor 10.0.1. Installation instructions can be found in https://pytorch.org/get-started/locally/. If you already have a diffent version, plpanease unistall it befores re-install.
+- PyTorch 10.0 from a nightly release. It **will not** work with 9.0 nor 10.0.1. Installation instructions can be found in https://pytorch.org/get-started/locally/. If you already have a diffent version, plpanease unistall it befores re-install.
 - torchvision from master
 - cocoapi
 - yacs
