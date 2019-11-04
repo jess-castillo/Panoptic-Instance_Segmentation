@@ -1,4 +1,4 @@
-%%writefile maskrcnn-benchmark/maskrcnn_benchmark/config/defaults.py
+#writefile maskrcnn-benchmark/maskrcnn_benchmark/config/defaults.py
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 import os
 
